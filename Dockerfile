@@ -17,7 +17,8 @@ WORKDIR /app
 COPY . /app
 
 # 配置 Git（可选，视情况而定）
-RUN git config --global user.email "dushuren@gmail.com" && \
+RUN git init && \
+    git config --global user.email "dushuren@gmail.com" && \
     git config --global user.name "lizhz" && \
     git config --local core.quotepath false
 
