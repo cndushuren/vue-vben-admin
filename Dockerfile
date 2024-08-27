@@ -17,9 +17,11 @@ WORKDIR /app
 COPY . /app
 
 # 配置 Git（可选，视情况而定）
-RUN git init && \
-    git config --global user.email "dushuren@gmail.com" && \
+RUN git config --global user.email "dushuren@gmail.com" && \
     git config --global user.name "lizhz" && \
+    git init && \
+    git add . && \
+    git commit -m "Initial commit" && \
     git config --local core.quotepath false
 
 # RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
