@@ -11,14 +11,15 @@ RUN corepack enable
 # 安装 Git
 RUN apt-get update && apt-get install -y git
 
-# 配置 Git 基本参数
-RUN git config --global user.name "lizhz" && \
-    git config --global user.email "dushuren@gmail.com"
-
 WORKDIR /app
 
 # copy package.json and pnpm-lock.yaml to workspace
 COPY . /app
+
+# 配置 Git（可选，视情况而定）
+RUN git config --global user.email "dushuren@gmail.com" && \
+    git config --global user.name "lizhz" && \
+    git config --local core.quotepath false
 
 # RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm install --frozen-lockfile
