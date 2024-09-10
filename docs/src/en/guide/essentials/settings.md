@@ -55,6 +55,9 @@ VITE_DEVTOOLS=true
 
 # Whether to inject global loading
 VITE_INJECT_APP_LOADING=true
+
+# Whether to generate after packaging dist.zip
+VITE_ARCHIVER=true
 ```
 
 :::
@@ -237,7 +240,7 @@ const defaultPreferences: Preferences = {
   theme: {
     builtinType: 'default',
     colorDestructive: 'hsl(348 100% 61%)',
-    colorPrimary: 'hsl(231 98% 65%)',
+    colorPrimary: 'hsl(212 100% 45%)',
     colorSuccess: 'hsl(144 57% 58%)',
     colorWarning: 'hsl(42 84% 61%)',
     mode: 'dark',

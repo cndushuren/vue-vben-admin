@@ -3,7 +3,11 @@ import type { ExtendedModalApi, ModalProps } from './modal';
 
 import { computed, nextTick, ref, watch } from 'vue';
 
-import { useIsMobile, usePriorityValue } from '@vben-core/composables';
+import {
+  useIsMobile,
+  usePriorityValue,
+  useSimpleLocale,
+} from '@vben-core/composables';
 import { Expand, Info, Shrink } from '@vben-core/icons';
 import {
   Dialog,
@@ -12,7 +16,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   VbenButton,
   VbenIconButton,
   VbenLoading,
@@ -20,8 +23,6 @@ import {
   VisuallyHidden,
 } from '@vben-core/shadcn-ui';
 import { cn } from '@vben-core/shared';
-
-// import { useElementSize } from '@vueuse/core';
 
 import { useModalDraggable } from './use-modal-draggable';
 
@@ -42,15 +43,16 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const contentRef = ref();
+const wrapperRef = ref<HTMLElement>();
 const dialogRef = ref();
 const headerRef = ref();
 const footerRef = ref();
 
+const { $t } = useSimpleLocale();
 const { isMobile } = useIsMobile();
-// const { height: headerHeight } = useElementSize(headerRef);
-// const { height: footerHeight } = useElementSize(footerRef);
 const state = props.modalApi?.useStore?.();
 
+const header = usePriorityValue('header', props, state);
 const title = usePriorityValue('title', props, state);
 const fullscreen = usePriorityValue('fullscreen', props, state);
 const description = usePriorityValue('description', props, state);
@@ -67,10 +69,15 @@ const draggable = usePriorityValue('draggable', props, state);
 const fullscreenButton = usePriorityValue('fullscreenButton', props, state);
 const closeOnClickModal = usePriorityValue('closeOnClickModal', props, state);
 const closeOnPressEscape = usePriorityValue('closeOnPressEscape', props, state);
+const showCancelButton = usePriorityValue('showCancelButton', props, state);
+const showConfirmButton = usePriorityValue('showConfirmButton', props, state);
 
-const shouldFullscreen = computed(() => fullscreen.value || isMobile.value);
+const shouldFullscreen = computed(
+  () => (fullscreen.value && header.value) || isMobile.value,
+);
+
 const shouldDraggable = computed(
-  () => draggable.value && !shouldFullscreen.value,
+  () => draggable.value && !shouldFullscreen.value && header.value,
 );
 
 const { dragging, transform } = useModalDraggable(
@@ -79,32 +86,29 @@ const { dragging, transform } = useModalDraggable(
   shouldDraggable,
 );
 
-// const loadingStyle = computed(() => {
-//   // py-5 4px*5*2
-//   const headerPadding = 40;
-//   // p-2 4px*2*2
-//   const footerPadding = 16;
-
-//   return {
-//     bottom: `${footerHeight.value + footerPadding}px`,
-//     height: `calc(100% - ${footerHeight.value + headerHeight.value + headerPadding + footerPadding}px)`,
-//     top: `${headerHeight.value + headerPadding}px`,
-//   };
-// });
-
 watch(
   () => state?.value?.isOpen,
   async (v) => {
     if (v) {
       await nextTick();
-      if (contentRef.value) {
-        const innerContentRef = contentRef.value.getContentRef();
-        dialogRef.value = innerContentRef.$el;
+      if (!contentRef.value) return;
+      const innerContentRef = contentRef.value.getContentRef();
+      dialogRef.value = innerContentRef.$el;
+      // reopen modal reassign value
+      const { offsetX, offsetY } = transform;
+      dialogRef.value.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+    }
+  },
+);
 
-        // reopen modal reassign value
-        const { offsetX, offsetY } = transform;
-        dialogRef.value.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-      }
+watch(
+  () => showLoading.value,
+  (v) => {
+    if (v && wrapperRef.value) {
+      wrapperRef.value.scrollTo({
+        // behavior: 'smooth',
+        top: 0,
+      });
     }
   },
 );
@@ -142,26 +146,22 @@ function pointerDownOutside(e: Event) {
     :open="state?.isOpen"
     @update:open="() => modalApi?.close()"
   >
-    <DialogTrigger v-if="$slots.trigger" as-child>
-      <slot name="trigger"> </slot>
-    </DialogTrigger>
-
     <DialogContent
       ref="contentRef"
       :class="
         cn(
-          'left-0 right-0 top-[10vh] mx-auto flex max-h-[80%] w-[520px] flex-col p-0',
+          'border-border left-0 right-0 top-[10vh] mx-auto flex max-h-[80%] w-[520px] flex-col border p-0',
           props.class,
           {
             'left-0 top-0 size-full max-h-full !translate-x-0 !translate-y-0':
               shouldFullscreen,
-            'top-1/2 -translate-y-1/2': centered && !shouldFullscreen,
+            'top-1/2 !-translate-y-1/2': centered && !shouldFullscreen,
             'duration-300': !dragging,
           },
         )
       "
       :show-close="closable"
-      close-class="top-4"
+      close-class="top-3"
       @escape-key-down="escapeKeyDown"
       @interact-outside="interactOutside"
       @pointer-down-outside="pointerDownOutside"
@@ -170,8 +170,9 @@ function pointerDownOutside(e: Event) {
         ref="headerRef"
         :class="
           cn(
-            'border-b px-6 py-5',
+            'border-b px-5 py-4',
             {
+              hidden: !header,
               'cursor-move select-none': shouldDraggable,
             },
             props.headerClass,
@@ -182,12 +183,14 @@ function pointerDownOutside(e: Event) {
           <slot name="title">
             {{ title }}
 
-            <VbenTooltip v-if="titleTooltip" side="right">
-              <template #trigger>
-                <Info class="inline-flex size-5 cursor-pointer pb-1" />
-              </template>
-              {{ titleTooltip }}
-            </VbenTooltip>
+            <slot v-if="titleTooltip" name="titleTooltip">
+              <VbenTooltip side="right">
+                <template #trigger>
+                  <Info class="inline-flex size-5 cursor-pointer pb-1" />
+                </template>
+                {{ titleTooltip }}
+              </VbenTooltip>
+            </slot>
           </slot>
         </DialogTitle>
         <DialogDescription v-if="description">
@@ -201,19 +204,24 @@ function pointerDownOutside(e: Event) {
         </VisuallyHidden>
       </DialogHeader>
       <div
+        ref="wrapperRef"
         :class="
-          cn('relative min-h-40 flex-1 p-3', contentClass, {
-            'overflow-y-auto': !showLoading,
+          cn('relative min-h-40 flex-1 overflow-y-auto p-3', contentClass, {
+            'overflow-hidden': showLoading,
           })
         "
       >
-        <VbenLoading v-if="showLoading" class="size-full" spinning />
+        <VbenLoading
+          v-if="showLoading"
+          class="size-full h-auto min-h-full"
+          spinning
+        />
         <slot></slot>
       </div>
 
       <VbenIconButton
         v-if="fullscreenButton"
-        class="hover:bg-accent hover:text-accent-foreground text-foreground/80 flex-center absolute right-10 top-4 hidden size-6 rounded-full px-1 text-lg opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none sm:block"
+        class="hover:bg-accent hover:text-accent-foreground text-foreground/80 flex-center absolute right-10 top-3 hidden size-6 rounded-full px-1 text-lg opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none sm:block"
         @click="handleFullscreen"
       >
         <Shrink v-if="fullscreen" class="size-3.5" />
@@ -232,17 +240,22 @@ function pointerDownOutside(e: Event) {
       >
         <slot name="prepend-footer"></slot>
         <slot name="footer">
-          <VbenButton variant="ghost" @click="() => modalApi?.onCancel()">
+          <VbenButton
+            v-if="showCancelButton"
+            variant="ghost"
+            @click="() => modalApi?.onCancel()"
+          >
             <slot name="cancelText">
-              {{ cancelText }}
+              {{ cancelText || $t('cancel') }}
             </slot>
           </VbenButton>
           <VbenButton
+            v-if="showConfirmButton"
             :loading="confirmLoading"
             @click="() => modalApi?.onConfirm()"
           >
             <slot name="confirmText">
-              {{ confirmText }}
+              {{ confirmText || $t('confirm') }}
             </slot>
           </VbenButton>
         </slot>

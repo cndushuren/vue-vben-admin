@@ -16,14 +16,6 @@ const routes: RouteRecordRaw[] = [
     path: '/examples',
     children: [
       {
-        name: 'EllipsisExample',
-        path: '/examples/ellipsis',
-        component: () => import('#/views/examples/ellipsis/index.vue'),
-        meta: {
-          title: $t('page.examples.ellipsis.title'),
-        },
-      },
-      {
         name: 'ModalExample',
         path: '/examples/modal',
         component: () => import('#/views/examples/modal/index.vue'),
@@ -37,6 +29,22 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/examples/drawer/index.vue'),
         meta: {
           title: $t('page.examples.drawer.title'),
+        },
+      },
+      {
+        name: 'EllipsisExample',
+        path: '/examples/ellipsis',
+        component: () => import('#/views/examples/ellipsis/index.vue'),
+        meta: {
+          title: $t('page.examples.ellipsis.title'),
+        },
+      },
+      {
+        name: 'CaptchaExample',
+        path: '/examples/captcha',
+        component: () => import('#/views/examples/captcha/index.vue'),
+        meta: {
+          title: $t('page.examples.captcha.title'),
         },
       },
     ],

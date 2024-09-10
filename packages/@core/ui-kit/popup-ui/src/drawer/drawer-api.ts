@@ -28,17 +28,16 @@ export class DrawerApi {
     } = options;
 
     const defaultState: DrawerState = {
-      cancelText: '取消',
       closable: true,
       closeOnClickModal: true,
       closeOnPressEscape: true,
       confirmLoading: false,
-      confirmText: '确定',
       footer: true,
       isOpen: false,
       loading: false,
       modal: true,
-      sharedData: {},
+      showCancelButton: true,
+      showConfirmButton: true,
       title: '',
     };
 
@@ -93,7 +92,11 @@ export class DrawerApi {
    * 取消操作
    */
   onCancel() {
-    this.api.onCancel?.();
+    if (this.api.onCancel) {
+      this.api.onCancel?.();
+    } else {
+      this.close();
+    }
   }
 
   /**

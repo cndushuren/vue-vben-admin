@@ -55,6 +55,7 @@ VITE_DEVTOOLS=true
 
 # 是否注入全局loading
 VITE_INJECT_APP_LOADING=true
+
 ```
 
 ```bash [.env.production]
@@ -75,6 +76,10 @@ VITE_ROUTER_HISTORY=hash
 
 # 是否注入全局loading
 VITE_INJECT_APP_LOADING=true
+
+# 打包后是否生成dist.zip
+VITE_ARCHIVER=true
+
 ```
 
 :::
@@ -257,7 +262,7 @@ const defaultPreferences: Preferences = {
   theme: {
     builtinType: 'default',
     colorDestructive: 'hsl(348 100% 61%)',
-    colorPrimary: 'hsl(231 98% 65%)',
+    colorPrimary: 'hsl(212 100% 45%)',
     colorSuccess: 'hsl(144 57% 58%)',
     colorWarning: 'hsl(42 84% 61%)',
     mode: 'dark',

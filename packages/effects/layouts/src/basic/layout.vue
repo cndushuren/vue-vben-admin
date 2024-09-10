@@ -78,7 +78,7 @@ const isMenuRounded = computed(() => {
 });
 
 const logoCollapsed = computed(() => {
-  if (isMobile.value) {
+  if (isMobile.value && sidebarCollapsed.value) {
     return true;
   }
   if (isHeaderNav.value || isMixedNav.value) {
@@ -295,11 +295,8 @@ const headerSlots = computed(() => {
     <template #content>
       <LayoutContent />
     </template>
-    <template
-      v-if="preferences.transition.loading"
-      #content-overlay="{ overlayStyle }"
-    >
-      <LayoutContentSpinner :overlay-style="overlayStyle" />
+    <template v-if="preferences.transition.loading" #content-overlay>
+      <LayoutContentSpinner />
     </template>
 
     <!-- 页脚 -->
