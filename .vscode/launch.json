@@ -4,6 +4,15 @@
   "configurations": [
     {
       "type": "chrome",
+      "name": "vben admin antd-test dev",
+      "request": "launch",
+      "url": "http://localhost:5111",
+      "env": { "NODE_ENV": "development" },
+      "sourceMaps": true,
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "chrome",
       "name": "vben admin playground dev",
       "request": "launch",
       "url": "http://localhost:5555",

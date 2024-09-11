@@ -9,6 +9,10 @@
       "path": "apps/web-antd",
     },
     {
+      "name": "@vben/web-antd-test",
+      "path": "apps/web-antd-test",
+    },
+    {
       "name": "@vben/web-ele",
       "path": "apps/web-ele",
     },

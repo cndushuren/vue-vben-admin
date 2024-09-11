@@ -190,6 +190,69 @@ importers:
         specifier: ^4.4.3
         version: 4.4.3(vue@3.5.3(typescript@5.5.4))
 
+  apps/web-antd-test:
+    dependencies:
+      '@vben/access':
+        specifier: workspace:*
+        version: link:../../packages/effects/access
+      '@vben/common-ui':
+        specifier: workspace:*
+        version: link:../../packages/effects/common-ui
+      '@vben/constants':
+        specifier: workspace:*
+        version: link:../../packages/constants
+      '@vben/hooks':
+        specifier: workspace:*
+        version: link:../../packages/effects/hooks
+      '@vben/icons':
+        specifier: workspace:*
+        version: link:../../packages/icons
+      '@vben/layouts':
+        specifier: workspace:*
+        version: link:../../packages/effects/layouts
+      '@vben/locales':
+        specifier: workspace:*
+        version: link:../../packages/locales
+      '@vben/plugins':
+        specifier: workspace:*
+        version: link:../../packages/effects/plugins
+      '@vben/preferences':
+        specifier: workspace:*
+        version: link:../../packages/preferences
+      '@vben/request':
+        specifier: workspace:*
+        version: link:../../packages/effects/request
+      '@vben/stores':
+        specifier: workspace:*
+        version: link:../../packages/stores
+      '@vben/styles':
+        specifier: workspace:*
+        version: link:../../packages/styles
+      '@vben/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+      '@vben/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
+      '@vueuse/core':
+        specifier: ^11.0.3
+        version: 11.0.3(vue@3.5.3(typescript@5.5.4))
+      ant-design-vue:
+        specifier: ^4.2.3
+        version: 4.2.3(vue@3.5.3(typescript@5.5.4))
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
+      pinia:
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.4)(vue@3.5.3(typescript@5.5.4))
+      vue:
+        specifier: 3.5.3
+        version: 3.5.3(typescript@5.5.4)
+      vue-router:
+        specifier: ^4.4.3
+        version: 4.4.3(vue@3.5.3(typescript@5.5.4))
+
   apps/web-ele:
     dependencies:
       '@vben/access':
@@ -2059,10 +2122,6 @@ packages:
 
   '@babel/regjsgen@0.8.0':
     resolution: {integrity: sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==}
-
-  '@babel/runtime@7.25.0':
-    resolution: {integrity: sha512-7dRy4DwXwtzBrPbZflqxnvfxLF8kdZXPkhymtDeFoFqE6ldzjQFgYTtYIFARcLEYDrqfBfYcZt1WqFxRoyC9Rw==}
-    engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.25.6':
     resolution: {integrity: sha512-VBj9MYyDb9tuLq7yzqjgzt6Q+IBQLrGZfdjOekyEirZPHxXWoTSGUTMrpsfi58Up73d13NfYLv8HT9vmznjzhQ==}
@@ -11004,10 +11063,6 @@ snapshots:
 
   '@babel/regjsgen@0.8.0': {}
 
-  '@babel/runtime@7.25.0':
-    dependencies:
-      regenerator-runtime: 0.14.1
-
   '@babel/runtime@7.25.6':
     dependencies:
       regenerator-runtime: 0.14.1
@@ -13691,7 +13746,7 @@ snapshots:
     dependencies:
       '@ant-design/colors': 6.0.0
       '@ant-design/icons-vue': 7.0.1(vue@3.5.3(typescript@5.5.4))
-      '@babel/runtime': 7.25.0
+      '@babel/runtime': 7.25.6
       '@ctrl/tinycolor': 4.1.0
       '@emotion/hash': 0.9.2
       '@emotion/unitless': 0.8.1
@@ -14588,7 +14643,7 @@ snapshots:
 
   date-fns@2.30.0:
     dependencies:
-      '@babel/runtime': 7.25.0
+      '@babel/runtime': 7.25.6
 
   date-fns@3.6.0: {}
 
