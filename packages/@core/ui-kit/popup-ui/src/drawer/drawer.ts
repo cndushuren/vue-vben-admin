@@ -126,9 +126,13 @@ export type ExtendedDrawerApi = {
 
 export interface DrawerApiOptions extends DrawerState {
   /**
-   * 独立的弹窗组件
+   * 独立的抽屉组件
    */
   connectedComponent?: Component;
+  /**
+   * 在关闭时销毁抽屉。仅在使用 connectedComponent 时有效
+   */
+  destroyOnClose?: boolean;
   /**
    * 关闭前的回调，返回 false 可以阻止关闭
    * @returns
@@ -139,6 +143,11 @@ export interface DrawerApiOptions extends DrawerState {
    */
   onCancel?: () => void;
   /**
+   * 弹窗关闭动画结束的回调
+   * @returns
+   */
+  onClosed?: () => void;
+  /**
    * 点击确定按钮的回调
    */
   onConfirm?: () => void;
@@ -148,4 +157,9 @@ export interface DrawerApiOptions extends DrawerState {
    * @returns
    */
   onOpenChange?: (isOpen: boolean) => void;
+  /**
+   * 弹窗打开动画结束的回调
+   * @returns
+   */
+  onOpened?: () => void;
 }
